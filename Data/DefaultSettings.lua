@@ -1,0 +1,29 @@
+local E, L, V, P, G = unpack(ElvUI);
+
+P["TauntAlert"] = {
+	SoloEnabled = false,
+	PartyEnabled = true,
+	RaidEnabled = true,
+	BGEnabled = false,
+	ChatWindow = "__none__",
+	DisplayMineSuccess = false,
+	DisplayMineFailed = true,
+	DisplayPartySuccess = true,
+	DisplayPartyFailed = true,
+	DisplayPartyPetSuccess = true,
+	DisplayPartyPetFailed = true,
+	DisplayOtherPlayerSuccess = false,
+	DisplayOtherPlayerFailed = false,
+	DisplayOtherPetSuccess = false,
+	DisplayOtherPetFailed = false,
+	HearMineSuccess = "__no_sound__",
+	HearMineFailed = "QuestFail",
+	HearPartySuccess = "Bell",
+	HearPartyFailed = "QuestFail",
+	HearPartyPetSuccess = "Bell",
+	HearPartyPetFailed = "QuestFail",
+	HearOtherPlayerSuccess = "__no_sound__",
+	HearOtherPlayerFailed = "__no_sound__",
+	HearOtherPetSuccess = "__no_sound__",
+	HearOtherPetFailed = "__no_sound__"
+};
