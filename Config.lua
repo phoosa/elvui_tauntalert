@@ -49,9 +49,9 @@ end
 function TauntAlert:SetConfigValue(key, value)
 	E.db.TauntAlert[key] = value;
 	-- Play Sound
-	local sid = TauntAlert.SOUND_EFFECTS[value].id;
-	if (sid ~= nil) then
-		PlaySound(sid);
+	local sound = TauntAlert.SOUND_EFFECTS[value];
+	if (sound ~= nil and sound.id ~= nil) then
+		PlaySound(sound.id);
 	end
 	-- Reload our Event Handlers
 	TauntAlert:RefreshCombatLogMonitoring();

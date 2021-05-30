@@ -1,6 +1,6 @@
 ## Interface: 20501
 ## Author: Phoosa
-## Version: 1.1.1
+## Version: 1.2.1
 ## Title: |cff1784d1ElvUI Classic|r Taunt Alert
 ## Notes: Get Notified on various Taunt Events.
 ## RequiredDeps: ElvUI
