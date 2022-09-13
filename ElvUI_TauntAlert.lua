@@ -45,6 +45,7 @@ TauntAlert.CHAT_COLOR = "|cff2f9bfa";
 TauntAlert.DISABLED_CHAT_WINDOW = "__none__";
 TauntAlert.DATA = {
 	CLASSES = {
+		["Death Knight"] = "Death Knight",
 		Druid 		= "Druid",
 		Hunter 		= "Hunter",
 		HunterPet 	= "Hunter Pet",
@@ -62,16 +63,17 @@ TauntAlert.DATA = {
 	}
 };
 TauntAlert.CLASS_COLORS = {
-	[TauntAlert.DATA.CLASSES.Druid]    = "|cffFF7D0A",
-	[TauntAlert.DATA.CLASSES.Hunter]   = "|cffABD473",
-	[TauntAlert.DATA.CLASSES.HunterPet]= "|cffABD473",
-	[TauntAlert.DATA.CLASSES.Mage]     = "|cff69CCF0",
-	[TauntAlert.DATA.CLASSES.Paladin]  = "|cffF58CBA",
-	[TauntAlert.DATA.CLASSES.Priest]   = "|cffFFFFFF",
-	[TauntAlert.DATA.CLASSES.Rogue]    = "|cffFFF569",
-	[TauntAlert.DATA.CLASSES.Shaman]   = "|cff0070DE",
-	[TauntAlert.DATA.CLASSES.Warlock]  = "|cff9482C9",
-	[TauntAlert.DATA.CLASSES.Warrior]  = "|cffC79C6E"
+	[TauntAlert.DATA.CLASSES["Death Knight"]]  = "|cffC41E3A",
+	[TauntAlert.DATA.CLASSES.Druid]            = "|cffFF7D0A",
+	[TauntAlert.DATA.CLASSES.Hunter]           = "|cffABD473",
+	[TauntAlert.DATA.CLASSES.HunterPet]        = "|cffABD473",
+	[TauntAlert.DATA.CLASSES.Mage]             = "|cff69CCF0",
+	[TauntAlert.DATA.CLASSES.Paladin]          = "|cffF58CBA",
+	[TauntAlert.DATA.CLASSES.Priest]           = "|cffFFFFFF",
+	[TauntAlert.DATA.CLASSES.Rogue]            = "|cffFFF569",
+	[TauntAlert.DATA.CLASSES.Shaman]           = "|cff0070DE",
+	[TauntAlert.DATA.CLASSES.Warlock]          = "|cff9482C9",
+	[TauntAlert.DATA.CLASSES.Warrior]          = "|cffC79C6E"
 };
 TauntAlert.SOUND_EFFECTS = {
 	ArcaneExplosion = {
@@ -145,28 +147,32 @@ TauntAlert.SOUND_EFFECTS = {
 };
 
 TauntAlert.TAUNTS = {
-	["355"]   = { class = TauntAlert.DATA.CLASSES.Warrior,   type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Taunt
-	["1161"]  = { class = TauntAlert.DATA.CLASSES.Warrior,   type = TauntAlert.DATA.TAUNT_TYPES.AOE},    -- Challenging Shout
-	["6795"]  = { class = TauntAlert.DATA.CLASSES.Druid,     type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl
-	["5209"]  = { class = TauntAlert.DATA.CLASSES.Druid,     type = TauntAlert.DATA.TAUNT_TYPES.AOE},    -- Challenging Roar
-	["31789"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Righteous Defense
-	["31790"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Righteous Defense (debuff)
-	["20736"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Distracting Shot (Rank 1)
-	["14274"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Distracting Shot (Rank 2)
-	["15629"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Distracting Shot (Rank 3)
-	["15630"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Distracting Shot (Rank 4)
-	["15631"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Distracting Shot (Rank 5)
-	["15632"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Distracting Shot (Rank 6)
-	["27020"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Distracting Shot (Rank 7)
-	["34477"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Misdirection
-	["2649"]  = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl (Rank 1)
-	["14916"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl (Rank 2)
-	["14917"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl (Rank 3)
-	["14918"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl (Rank 4)
-	["14919"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl (Rank 5)
-	["14920"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl (Rank 6)
-	["14921"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Growl (Rank 7)
-	["27047"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}  -- Growl (Rank 8)
+	["355"]   = { class = TauntAlert.DATA.CLASSES.Warrior,   type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Taunt
+	["1161"]  = { class = TauntAlert.DATA.CLASSES.Warrior,   type = TauntAlert.DATA.TAUNT_TYPES.AOE},               -- Challenging Shout
+	["56222"]  = { class = TauntAlert.DATA.CLASSES["Death Knight"],     type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Dark Command
+	["49576"]  = { class = TauntAlert.DATA.CLASSES["Death Knight"],     type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Death Grip
+	["6795"]  = { class = TauntAlert.DATA.CLASSES.Druid,     type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl
+	["5209"]  = { class = TauntAlert.DATA.CLASSES.Druid,     type = TauntAlert.DATA.TAUNT_TYPES.AOE},               -- Challenging Roar
+	["31789"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Righteous Defense
+	["31790"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Righteous Defense (debuff)
+	["20736"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 1)
+	["14274"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 2)
+	["15629"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 3)
+	["15630"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 4)
+	["15631"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 5)
+	["15632"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 6)
+	["27020"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 7)
+	["34477"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Misdirection
+	["2649"]  = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 1)
+	["14916"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 2)
+	["14917"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 3)
+	["14918"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 4)
+	["14919"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 5)
+	["14920"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 6)
+	["14921"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 7)
+	["27047"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 8)
+	["61676"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl (Rank 9)
+	["19577"] = { class = TauntAlert.DATA.CLASSES.HunterPet, type = TauntAlert.DATA.TAUNT_TYPES.Single}             -- Intimidation
 };
 
 
@@ -255,9 +261,6 @@ function TauntAlert:OnCombatLogEvent(self, event, ...)
 
 	-- Was a Taunt Detected?
 	if (logData.taunt ~= nil) then
-		-- print("["..tostring(logData.event).."] ".."Taunt: "..tostring(logData.sourceName).." taunted <"..tostring(logData.destinationName).."> using "..tostring(logData.spellName).." ~~ "..tostring(logData.event));
-		-- print("Event["..logData.spellEventType.."="..SPELL_EVENT_TYPE_CAST.."] and ["..logData.spellEventStatus.."~="..SPELL_CAST_STATUS_SUCCESS.."]");
-		-- print("Event["..logData.spellEventType.."="..SPELL_EVENT_TYPE_AURA.."] and ["..logData.spellEventStatus.."=="..SPELL_AURA_STATUS_APPLIED.."]");
 		local tauntInfo = {
 			caster      = logData.sourceName,
 			casterType	= nil,
@@ -402,18 +405,6 @@ function TauntAlert:GetCombatLogEventInfo(...)
 		eventInfo.spellName    			= tEventInfo[13];
 		eventInfo.spellSchool  			= tEventInfo[14];
 		eventInfo.taunt 				= TauntAlert.TAUNTS[tostring(eventInfo.spellId)];
-		-- print(format("%s - Caster:%s Spell:%s ID:%s",
-		-- 	tostring(eventInfo.event),
-		-- 	tostring(eventInfo.sourceName),
-		-- 	tostring(eventInfo.spellName),
-		-- 	tostring(eventInfo.spellId)
-		-- ));
-		-- if (eventInfo.taunt ~= nil) then
-		-- 	print(format("[TAUNT DETECTED] class:%s type:%s",
-		-- 	tostring(eventInfo.taunt.class),
-		-- 	tostring(eventInfo.taunt.type)
-		-- ));
-		-- end
 
 		-- Get Cast/Aura and Status.
 		if (eventInfo.event:sub(1, 10) == "SPELL_AURA") then
@@ -422,8 +413,6 @@ function TauntAlert:GetCombatLogEventInfo(...)
 				eventInfo.spellEventStatus = SPELL_AURA_STATUS_APPLIED;
 			elseif (eventInfo.event == "SPELL_AURA_REMOVED" or eventInfo.event == "SPELL_AURA_BROKEN" or eventInfo.event == "SPELL_AURA_BROKEN_SPELL") then
 				eventInfo.spellEventStatus = SPELL_AURA_STATUS_REMOVED;
-			-- else
-			-- 	print("AURA Unhandled Event Status: "..eventInfo.event.." | FOR: "..eventInfo.spellName);
 			end
 		else
 			if (eventInfo.event:sub(1, 10) == "SPELL_CAST") then
@@ -433,22 +422,6 @@ function TauntAlert:GetCombatLogEventInfo(...)
 				elseif (eventInfo.event == "SPELL_CAST_FAILED") then
 					eventInfo.spellEventStatus = SPELL_CAST_STATUS_FAILED;
 					eventInfo.spellFailedReason = tEventInfo[15];
-					-- print(format("timestamp:%s, event:%s, hideCaster:%s, sourceFlags:%s, destinationGuid:%s, destinationName:%s, destinationFlags:%s, spellId:%s, spellName:%s, spellSchool:%s, failedType:%s",
-					-- 	tostring(eventInfo.eventInfo),
-					-- 	tostring(eventInfo.event),
-					-- 	tostring(eventInfo.hideCaster),
-					-- 	tostring(eventInfo.sourceFlags),
-					-- 	tostring(eventInfo.destinationGuid),
-					-- 	tostring(eventInfo.destinationName),
-					-- 	tostring(eventInfo.destinationFlags),
-					-- 	tostring(eventInfo.spellId),
-					-- 	tostring(eventInfo.spellName),
-					-- 	tostring(eventInfo.spellSchool),
-					-- 	tostring(eventInfo.failedType)
-
-					-- ));
-				-- else
-				-- 	print("SPELL Unhandled Event Status: "..eventInfo.event.." | FOR: "..eventInfo.spellName);
 				-- I should only track SPELL_CAST_MISSED and SPELL_AURA_APPLIED
 				end
 			elseif (eventInfo.event == "SPELL_MISSED") then

@@ -2,6 +2,7 @@
 local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI_TauntAlert", "enUS", true, true);
 
 -- Classes
+L["Death Knight"] = true;
 L["Druid"] = true;
 L["Hunter"] = true;
 L["Mage"] = true;
@@ -18,6 +19,8 @@ L["Growl"] = true;
 L["Mocking Blow"] = true;
 L["Challenging Shout"] = true;
 L["Challenging Roar"] = true;
+L["Dark Command"] = true;
+L["Death Grip"] = true;
 L["Distracting Shot"] = true;
 
 -- Sounds
