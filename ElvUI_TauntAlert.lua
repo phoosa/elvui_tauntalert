@@ -153,8 +153,9 @@ TauntAlert.TAUNTS = {
 	["49576"]  = { class = TauntAlert.DATA.CLASSES["Death Knight"],     type = TauntAlert.DATA.TAUNT_TYPES.Single}, -- Death Grip
 	["6795"]  = { class = TauntAlert.DATA.CLASSES.Druid,     type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Growl
 	["5209"]  = { class = TauntAlert.DATA.CLASSES.Druid,     type = TauntAlert.DATA.TAUNT_TYPES.AOE},               -- Challenging Roar
-	["31789"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Righteous Defense
-	["31790"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Righteous Defense (debuff)
+	["62124"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Hand of Reckoning
+	["31789"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.AOE},               -- Righteous Defense
+	["31790"] = { class = TauntAlert.DATA.CLASSES.Paladin,   type = TauntAlert.DATA.TAUNT_TYPES.AOE},               -- Righteous Defense (debuff)
 	["20736"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 1)
 	["14274"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 2)
 	["15629"] = { class = TauntAlert.DATA.CLASSES.Hunter,    type = TauntAlert.DATA.TAUNT_TYPES.Single},            -- Distracting Shot (Rank 3)
