@@ -59,6 +59,65 @@ end
 
 
 --[[
+	Get Config Value for Spell
+	Get the Users saved Spell configuration value for the `sid` provided
+]]--
+function TauntAlert:GetSpellConfigValue(sid)
+	return E.db.TauntAlert.spells[sid];
+end
+
+
+--[[
+	Set Spell Config Value
+	Set the Users saved Spell configuration value for all spells matching the `spell.group`
+]]--
+function TauntAlert:SetSpellConfigValue(spell, value)
+    for k, v in pairs(TauntAlert.TAUNTS) do
+        if (v.group == spell.group) then
+            E.db.TauntAlert.spells[k] = value;
+        end
+	end
+	-- Reload our Event Handlers
+	TauntAlert:RefreshCombatLogMonitoring();
+end
+
+--[[
+    Render Taunt Spells Config Toggles
+]]--
+function RenderTauntSpells()
+    local returnVal = {};
+    for k,spell in pairs(TauntAlert.TAUNTS) do
+        local name = GetSpellInfo(tonumber(k));
+        if (nil ~= name) then
+            if (nil == returnVal[spell.class]) then
+                returnVal[spell.class] = {
+                    type = "group",
+                    inline = true,
+                    name = TauntAlert.Colorize(spell.class, TauntAlert.CLASS_COLOR[spell.class]),
+                    args = {}
+                };
+            end
+            
+            if (spell.type == TauntAlert.TAUNT_TYPES.TRANS) then
+                name = name ..' '..L["(Transfer)"];
+            elseif (spell.type == TauntAlert.TAUNT_TYPES.AOE) then
+                name = name ..' '..L["(AOE)"];
+            end
+
+            returnVal[spell.class].args[name] = {
+                type = "toggle",
+                name = tostring(name),
+                width = "full",
+                get = function(info) return TauntAlert:GetSpellConfigValue(k); end,
+                set = function(info, v) TauntAlert:SetSpellConfigValue(spell, v); end
+            }
+        end
+    end
+    return returnVal;
+end
+
+
+--[[
 	Config Options
 	Initialize Configuration Options using AceConfig.
 	@see http://www.wowace.com/addons/ace3/pages/ace-config-3-0-options-tables/
@@ -73,7 +132,7 @@ function TauntAlert:ConfigOptions()
 			header1 = {
 				order = 1,
 				type = "header",
-				name = format(L["%s (v%s) by %sPhoosa|r"], TauntAlert.TITLE, TauntAlert.VERSION, TauntAlert.CLASS_COLORS[L["Druid"]]),
+                name = format(L["%s (v%s) by %sFoosader|r"], TauntAlert.TITLE, TauntAlert.VERSION, TauntAlert.CLASS_COLOR.PALADIN)
 			},
 			global = {
 				order = 2,
@@ -188,7 +247,16 @@ function TauntAlert:ConfigOptions()
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
-					spacer2 = {
+                    DisplayPartyTransfer = {
+                        order = 203,
+						type = "toggle",
+						name = L["Party Threat Transfer"],
+						desc = L["Party/Raid member Threat Transfers will be displayed in the Chat Window."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+                    },
+                    spacer2 = {
 						order = 300,
 						type = "description",
 						name = "\n",
@@ -236,6 +304,15 @@ function TauntAlert:ConfigOptions()
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
+                    DisplayOtherPlayerTransfer = {
+                        order = 403,
+						type = "toggle",
+						name = L["Non-Party Threat Transfer"],
+						desc = L["Threat Transfers by Players NOT in my Party or Raid will be displayed in the Chat Window."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+                    },
 					spacer4 = {
 						order = 500,
 						type = "description",
@@ -273,7 +350,12 @@ function TauntAlert:ConfigOptions()
 						name = L["Select the Sound Effect you would like to hear when a Taunt is detected:"].."\n",
 						width = "full"
 					},
-					HearMineSuccess = {
+                    _successHeader = {
+                        order = 99,
+                        type = "header",
+                        name = L["Successful Taunt Sounds"]
+                    },
+                    HearMineSuccess = {
 						order = 101,
 						type = "select",
 						values = TauntAlert.GetSoundEffectOptionNames,
@@ -283,24 +365,8 @@ function TauntAlert:ConfigOptions()
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
-					HearMineFailed = {
+                    HearPartySuccess = {
 						order = 102,
-						type = "select",
-						values = TauntAlert.GetSoundEffectOptionNames,
-						name = L["My Failed Taunts"],
-						desc = L["My Failed Taunts will trigger this sound effect."],
-						width = "normal",
-						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
-						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
-					},
-					spacer1 = {
-						order = 200,
-						type = "description",
-						name = "\n",
-						width = "full",
-					},
-					HearPartySuccess = {
-						order = 201,
 						type = "select",
 						values = TauntAlert.GetSoundEffectOptionNames,
 						name = L["Party Taunts"],
@@ -309,24 +375,8 @@ function TauntAlert:ConfigOptions()
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
-					HearPartyFailed = {
-						order = 202,
-						type = "select",
-						values = TauntAlert.GetSoundEffectOptionNames,
-						name = L["Party Failed Taunts"],
-						desc = L["Party/Raid member Failed Taunts will trigger this sound effect."],
-						width = "normal",
-						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
-						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
-					},
-					spacer2 = {
-						order = 300,
-						type = "description",
-						name = "\n",
-						width = "full",
-					},
-					HearPartyPetSuccess = {
-						order = 301,
+                    HearPartyPetSuccess = {
+						order = 103,
 						type = "select",
 						values = TauntAlert.GetSoundEffectOptionNames,
 						name = L["Party Pet Taunts"],
@@ -335,24 +385,8 @@ function TauntAlert:ConfigOptions()
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
-					HearPartyPetFailed = {
-						order = 302,
-						type = "select",
-						values = TauntAlert.GetSoundEffectOptionNames,
-						name = L["Party Pet Failed Taunts"],
-						desc = L["Failed Taunts by Pets in my Party or Raid will trigger this sound effect."],
-						width = "normal",
-						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
-						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
-					},
-					spacer3 = {
-						order = 400,
-						type = "description",
-						name = "\n",
-						width = "full",
-					},
-					HearOtherPlayerSuccess = {
-						order = 401,
+                    HearOtherPlayerSuccess = {
+						order = 104,
 						type = "select",
 						values = TauntAlert.GetSoundEffectOptionNames,
 						name = L["Non-Party Taunts"],
@@ -361,24 +395,8 @@ function TauntAlert:ConfigOptions()
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
-					HearOtherPlayerFailed = {
-						order = 402,
-						type = "select",
-						values = TauntAlert.GetSoundEffectOptionNames,
-						name = L["Non-Party Failed Taunts"],
-						desc = L["Failed Taunts by Players NOT in my Party or Raid will trigger this sound effect."],
-						width = "normal",
-						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
-						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
-					},
-					spacer4 = {
-						order = 500,
-						type = "description",
-						name = "\n",
-						width = "full",
-					},
-					HearOtherPetSuccess = {
-						order = 501,
+                    HearOtherPetSuccess = {
+						order = 105,
 						type = "select",
 						values = TauntAlert.GetSoundEffectOptionNames,
 						name = L["Non-Party Pet Taunts"],
@@ -387,8 +405,78 @@ function TauntAlert:ConfigOptions()
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
+                    _transferHeader = {
+                        order = 199,
+                        type = "header",
+                        name = L["Threat Transfer Sounds"]
+                    },
+                    HearPartyTransfer = {
+						order = 202,
+						type = "select",
+						values = TauntAlert.GetSoundEffectOptionNames,
+						name = L["Party Threat Transfer"],
+						desc = L["Party/Raid member Successful Threat Transfers will trigger this sound effect."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+					},
+                    HearOtherTransfer = {
+						order = 203,
+						type = "select",
+						values = TauntAlert.GetSoundEffectOptionNames,
+						name = L["Non-Party Threat Transfer"],
+						desc = L["Successful Threat Transfers by Players NOT in my Party or Raid will trigger this sound effect."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+					},
+                    _failHeader = {
+                        order = 299,
+                        type = "header",
+                        name = L["Failed Taunt Sounds"]
+                    },
+					HearMineFailed = {
+						order = 301,
+						type = "select",
+						values = TauntAlert.GetSoundEffectOptionNames,
+						name = L["My Failed Taunts"],
+						desc = L["My Failed Taunts will trigger this sound effect."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+					},
+                    HearPartyFailed = {
+						order = 302,
+						type = "select",
+						values = TauntAlert.GetSoundEffectOptionNames,
+						name = L["Party Failed Taunts"],
+						desc = L["Party/Raid member Failed Taunts will trigger this sound effect."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+					},
+                    HearPartyPetFailed = {
+						order = 303,
+						type = "select",
+						values = TauntAlert.GetSoundEffectOptionNames,
+						name = L["Party Pet Failed Taunts"],
+						desc = L["Failed Taunts by Pets in my Party or Raid will trigger this sound effect."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+					},
+					HearOtherPlayerFailed = {
+						order = 304,
+						type = "select",
+						values = TauntAlert.GetSoundEffectOptionNames,
+						name = L["Non-Party Failed Taunts"],
+						desc = L["Failed Taunts by Players NOT in my Party or Raid will trigger this sound effect."],
+						width = "normal",
+						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+					},
 					HearOtherPetFailed = {
-						order = 502,
+						order = 304,
 						type = "select",
 						values = TauntAlert.GetSoundEffectOptionNames,
 						name = L["Non-Party Pet Failed Taunts"],
@@ -398,7 +486,13 @@ function TauntAlert:ConfigOptions()
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					}
 				}
-			}
+			},
+            taunts = {
+                order = 5,
+                type = "group",
+                name = L["Taunts"],
+                args = RenderTauntSpells()
+            }
 		}
 	};
 end

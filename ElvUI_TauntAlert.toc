@@ -1,13 +1,17 @@
-## Interface: 30400
+## Interface: 30401
 ## Author: Phoosa
-## Version: 1.4.2
+## Version: 1.5.1
 ## Title: |cff1784d1ElvUI Classic|r Taunt Alert
 ## Notes: Get Notified on various Taunt Events.
 ## RequiredDeps: ElvUI
 ## DefaultState: Enabled
+## X-Tukui-ProjectID: 11
+## X-Tukui-ProjectFolders: ElvUI_TauntAlert
 
 Locales\load_locales.xml
 ElvUI_TauntAlert.lua
 Data\DefaultSettings.lua
+Data\Spells.lua
+Data\TauntInfo.lua
+Data\SoundEffects.lua
 Config.lua
-
