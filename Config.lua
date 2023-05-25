@@ -189,27 +189,40 @@ function TauntAlert:ConfigOptions()
 				type = "group",
 				name = L["Display"],
 				args = {
+                    AnnounceLocation = {
+                        name = L["Announce To"],
+                        desc = L["How would you like to be notified of taunts?"].." "..L["HUD is a moveable frame, click 'Toggle Anchors' and move the frame labeled:"].."'Taunt Alert "..L["Announcements"].."'.",
+                        order = 0,
+                        type = "select",
+                        values = {
+                            hud = L["HUD"],
+                            chat = L["Chat Window"]
+                        },
+                        get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+                        set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+                    },
 					ChatWindow = {
-						order = 1,
-						type = "select",
-						values = TauntAlert.GetChatWindows,
-						name = L["Chat Window"],
-						desc = L["Select the Chat Window to display Taunt Details in. Only you will see the Taunt Alerts."],
-						width = "normal",
-						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
-						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
+                        order = 1,
+                        type = "select",
+                        values = TauntAlert.GetChatWindows,
+                        name = L["Chat Window"],
+                        desc = L["Select the Chat Window to display Taunt Details in. Only you will see the Taunt Alerts."],
+                        width = "normal",
+                        disabled = function() return TauntAlert:GetConfigValue('AnnounceLocation') ~= 'chat' end,
+                        get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
+                        set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
 					},
 					info = {
 						order = 2,
 						type = "description",
-						name = "\n\n"..L["Select which Taunts will be displayed in the Chat Window:"].."\n",
+						name = "\n\n"..L["Select which Taunts will be displayed:"].."\n",
 						width = "full"
 					},
 					DisplayMineSuccess = {
 						order = 101,
 						type = "toggle",
 						name = L["My Taunts"],
-						desc = L["My Successful Taunts will be displayed in the Chat Window."],
+						desc = L["My Successful Taunts will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -218,7 +231,7 @@ function TauntAlert:ConfigOptions()
 						order = 102,
 						type = "toggle",
 						name = L["My Failed Taunts"],
-						desc = L["My Failed Taunts will be displayed in the Chat Window."],
+						desc = L["My Failed Taunts will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -233,7 +246,7 @@ function TauntAlert:ConfigOptions()
 						order = 201,
 						type = "toggle",
 						name = L["Party Taunts"],
-						desc = L["Party/Raid member Successful Taunts will be displayed in the Chat Window."],
+						desc = L["Party/Raid member Successful Taunts will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -242,7 +255,7 @@ function TauntAlert:ConfigOptions()
 						order = 202,
 						type = "toggle",
 						name = L["Party Failed Taunts"],
-						desc = L["Party/Raid member Failed Taunts will be displayed in the Chat Window."],
+						desc = L["Party/Raid member Failed Taunts will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -251,7 +264,7 @@ function TauntAlert:ConfigOptions()
                         order = 203,
 						type = "toggle",
 						name = L["Party Threat Transfer"],
-						desc = L["Party/Raid member Threat Transfers will be displayed in the Chat Window."],
+						desc = L["Party/Raid member Threat Transfers will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -266,7 +279,7 @@ function TauntAlert:ConfigOptions()
 						order = 301,
 						type = "toggle",
 						name = L["Party Pet Taunts"],
-						desc = L["Successful Taunts by Pets in my Party or Raid will be displayed in the Chat Window."],
+						desc = L["Successful Taunts by Pets in my Party or Raid will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -275,7 +288,7 @@ function TauntAlert:ConfigOptions()
 						order = 302,
 						type = "toggle",
 						name = L["Party Pet Failed Taunts"],
-						desc = L["Failed Taunts by Pets in my Party or Raid will be displayed in the Chat Window."],
+						desc = L["Failed Taunts by Pets in my Party or Raid will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -290,7 +303,7 @@ function TauntAlert:ConfigOptions()
 						order = 401,
 						type = "toggle",
 						name = L["Non-Party Taunts"],
-						desc = L["Successful Taunts by Players NOT in my Party or Raid will be displayed in the Chat Window."],
+						desc = L["Successful Taunts by Players NOT in my Party or Raid will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -299,7 +312,7 @@ function TauntAlert:ConfigOptions()
 						order = 402,
 						type = "toggle",
 						name = L["Non-Party Failed Taunts"],
-						desc = L["Failed Taunts by Players NOT in my Party or Raid will be displayed in the Chat Window."],
+						desc = L["Failed Taunts by Players NOT in my Party or Raid will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -308,7 +321,7 @@ function TauntAlert:ConfigOptions()
                         order = 403,
 						type = "toggle",
 						name = L["Non-Party Threat Transfer"],
-						desc = L["Threat Transfers by Players NOT in my Party or Raid will be displayed in the Chat Window."],
+						desc = L["Threat Transfers by Players NOT in my Party or Raid will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -323,7 +336,7 @@ function TauntAlert:ConfigOptions()
 						order = 501,
 						type = "toggle",
 						name = L["Non-Party Pet Taunts"],
-						desc = L["Successful Taunts by Pets NOT in my Party or Raid will be displayed in the Chat Window."],
+						desc = L["Successful Taunts by Pets NOT in my Party or Raid will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end
@@ -332,7 +345,7 @@ function TauntAlert:ConfigOptions()
 						order = 502,
 						type = "toggle",
 						name = L["Non-Party Pet Failed Taunts"],
-						desc = L["Failed Taunts by Pets NOT in my Party or Raid will be displayed in the Chat Window."],
+						desc = L["Failed Taunts by Pets NOT in my Party or Raid will be displayed."],
 						width = "normal",
 						get = function(info) return TauntAlert:GetConfigValue(info[3]); end,
 						set = function(info, v) TauntAlert:SetConfigValue(info[3], v); end

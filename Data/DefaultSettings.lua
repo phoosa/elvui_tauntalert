@@ -5,6 +5,7 @@ P["TauntAlert"] = {
 	PartyEnabled = true,
 	RaidEnabled = true,
 	BGEnabled = false,
+    AnnounceLocation = "chat",
 	ChatWindow = "__none__",
 	DisplayMineSuccess = false,
 	DisplayMineFailed = true,

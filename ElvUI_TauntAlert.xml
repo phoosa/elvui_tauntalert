@@ -1,0 +1,26 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <MessageFrame name="ELVUI_TAUNTALERT_FRAME_ANNOUNCE"
+                frameStrata="MEDIUM"
+                insertMode="TOP"
+                parent="UIParent"
+                enableMouse="false"
+                enableKeyboard="false"
+                toplevel="true"
+                movable="false"
+                fade="true"
+                fadeDuration="1.0"
+                displayDuration="3.0"
+    >
+    <Size>
+      <AbsDimension x="400" y="100" />
+    </Size>
+    <Anchors>
+      <Anchor point="TOPLEFT">
+        <Offset>
+          <AbsDimension x="4" y="-100" />
+        </Offset>
+      </Anchor>
+    </Anchors>
+    <FontString inherits="NumberFontNormalHuge" justifyH="LEFT" justifyV="MIDDLE"/>
+  </MessageFrame>
+</Ui>

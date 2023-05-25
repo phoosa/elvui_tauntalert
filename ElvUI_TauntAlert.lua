@@ -4,6 +4,7 @@ local E, L, V, P, G = unpack(ElvUI);
 local TauntAlert = E:NewModule("TauntAlert", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0");
 --We can use this to automatically insert our GUI tables when ElvUI_Config is loaded.
 local EP = LibStub("LibElvUIPlugin-1.0");
+local LSM = E.Libs.LSM;
 --See http://www.wowinterface.com/forums/showthread.php?t=51502&p=304704&postcount=2
 local addonName, addonTable = ...;
 
@@ -86,7 +87,6 @@ TauntAlert.CLASSES = {
     DRUID       = 'DRUID',
     DEATHKNIGHT = 'DEATHKNIGHT',
     HUNTER      = 'HUNTER',
-    -- HUNTERPET   = 'HUNTERPET',
     MAGE        = 'MAGE',
     PALADIN     = 'PALADIN',
     PRIEST      = 'PRIEST',
@@ -111,7 +111,6 @@ TauntAlert.CLASS_COLOR = {
     DRUID                       = TauntAlert.COLORS.ORANGE,
     DEATHKNIGHT                 = TauntAlert.COLORS.RED,
     HUNTER                      = TauntAlert.COLORS.GREEN,
-    -- HUNTERPET                   = TauntAlert.COLORS.GREEN,
     MAGE                        = TauntAlert.COLORS.CYAN,
     PALADIN                     = TauntAlert.COLORS.PINK,
     PRIEST                      = TauntAlert.COLORS.WHITE,
@@ -129,6 +128,15 @@ TauntAlert.isMonitoringLog = false;
 -- EVENT REGISTRATION                         --
 --                                            --
 -- ========================================== --
+
+--[[
+    Initialize Announce Frame
+]]--
+function TauntAlert:InitializeAnnounceFrame()
+    ELVUI_TAUNTALERT_FRAME_ANNOUNCE:FontTemplate(LSM:Fetch("font"));
+
+    E:CreateMover(ELVUI_TAUNTALERT_FRAME_ANNOUNCE, "TauntAlert_Announce_Mover", "Taunt Alert "..L["Announcements"]);
+end
 
 --[[
     Create Pet Owner Frame
@@ -298,10 +306,7 @@ function TauntAlert:ProcessTaunt(tauntInfo)
 
     -- Display the Taunt Event in Chat.
     if (TauntAlert.CanDisplayTauntEvent[tauntInfo.casterType](tauntInfo)) then
-        local window = TauntAlert:GetConfigValue('ChatWindow');
-        if (window ~= nil and window ~= TauntAlert.DISABLED_CHAT_WINDOW) then
-            TauntAlert:PrintToChatWindow(TauntAlert:FormatChatMessage(tauntInfo), window);
-        end
+        TauntAlert:AnnounceMessage(TauntAlert:FormatChatMessage(tauntInfo));
     end
 end
 
@@ -497,11 +502,24 @@ TauntAlert.GetTauntEventSoundID = {
 
 
 --[[
+    Announce a Message to the appropriate location (frame or chat)
+]]--
+function TauntAlert:AnnounceMessage(msg)
+    local location = TauntAlert:GetConfigValue('AnnounceLocation');
+    if (location == 'hud') then
+        ELVUI_TAUNTALERT_FRAME_ANNOUNCE:AddMessage(msg, 1, 1, 1, 1.0);
+    elseif (location == 'chat') then
+        TauntAlert:PrintToChatWindow(
+            format(L["%s %s"], TauntAlert.Colorize("[TauntAlert]", TauntAlert.CHAT_COLOR), msg));
+    end
+end
+
+
+--[[
     Debug logging
 ]]--
 function TauntAlert:log(message)
-    local window = TauntAlert:GetConfigValue('ChatWindow');
-    TauntAlert:PrintToChatWindow(tostring(message), window);
+    TauntAlert:PrintToChatWindow(tostring(message), 1);
 end
 
 
@@ -523,14 +541,23 @@ end
 --[[
     Print Message to Chat Window
 ]]--
-function TauntAlert:PrintToChatWindow(message, windowName)
-    for i = 1, NUM_CHAT_WINDOWS, 1 do
-        local name, fontSize, r, g, b, alpha, shown, locked, docked, uninteractable = GetChatWindowInfo(i);
-        if (name) and (name:trim() ~= "") and (tostring(name) == tostring(windowName)) then
-            -- @NOTICE: Bypassing Ace:Print because it prepends the addon name
-            -- TauntAlert:Print(_G["ChatFrame"..i], tostring(message));
-            _G["ChatFrame"..i]:AddMessage(tostring(message));
+function TauntAlert:PrintToChatWindow(message, window)
+    if (window == nil) then
+        local windowName = TauntAlert:GetConfigValue('ChatWindow');
+        if (windowName ~= TauntAlert.DISABLED_CHAT_WINDOW) then
+            for i = 1, NUM_CHAT_WINDOWS, 1 do
+                local name, fontSize, r, g, b, alpha, shown, locked, docked, uninteractable = GetChatWindowInfo(i);
+                if (name) and (name:trim() ~= "") and (tostring(name) == tostring(windowName)) then
+                    window = i;
+                    break;
+                end
+            end
         end
+    end
+
+    if (window ~= nil) then
+        -- @NOTICE: Bypassing Ace:Print because it prepends the addon name
+        _G["ChatFrame"..window]:AddMessage(tostring(message));
     end
 end
 
@@ -550,11 +577,10 @@ function TauntAlert:FormatChatMessage(tauntInfo)
         if (classKey ~= nil and TauntAlert.CLASSES[classKey] ~= nil) then
             tauntInfo.class = classKey;
         end
-        ownerSuffix = format("<%s>", TauntAlert.Colorize(tauntInfo.petOwner.."'s pet", TauntAlert.CLASS_COLOR[tauntInfo.class]));
+        ownerSuffix = format("<%s>", TauntAlert.Colorize(format(L["%s's pet"], tauntInfo.petOwner), TauntAlert.CLASS_COLOR[tauntInfo.class]));
     end
 
-    local message = format(L["%s %s%s taunted <%s> using %s"],
-        TauntAlert.Colorize("[TauntAlert]", TauntAlert.CHAT_COLOR),
+    local message = format(L["%s%s taunted <%s> using %s"],
         TauntAlert.Colorize(tauntInfo.caster, TauntAlert.CLASS_COLOR[tauntInfo.class]),
         ownerSuffix,
         TauntAlert.Colorize(target, TauntAlert.CHAT_COLOR),
@@ -596,6 +622,8 @@ end
 function TauntAlert:Initialize()
     -- Register plugin so options are properly inserted when config is loaded
     EP:RegisterPlugin(addonName, TauntAlert.ConfigOptions);
+    -- Create Announcement Frame.
+    TauntAlert:InitializeAnnounceFrame();
     -- Create Frame needed to lookup Pet Owner
     TauntAlert:CreatePetOwnerFrame();
     -- Start handling events.
