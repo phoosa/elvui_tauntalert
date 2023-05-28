@@ -175,10 +175,12 @@ end
 ]]--
 function TauntAlert:RefreshCombatLogMonitoring()
     -- Should we be monitoring the Combat Log?
-    if (TauntAlert:ShouldMonitorCombatLog() and not TauntAlert.isMonitoringLog) then
-        self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "OnCombatLogEvent");
-        TauntAlert.isMonitoringLog = true;
-    else
+    if (TauntAlert:ShouldMonitorCombatLog()) then
+        if (not TauntAlert.isMonitoringLog) then
+            self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "OnCombatLogEvent");
+            TauntAlert.isMonitoringLog = true;
+        end
+    elseif (TauntAlert.isMonitoringLog) then
         self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
         TauntAlert.isMonitoringLog = false;
     end
