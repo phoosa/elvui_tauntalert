@@ -4,7 +4,8 @@ local TauntAlert = E:GetModule("TauntAlert");
 
 SoundEffect = {
     id = nil,
-    name = nil
+    name = nil,
+    file = nil
 };
 
 --[[
@@ -17,8 +18,30 @@ function SoundEffect:new(o)
     return o;
 end
 
+--[[
+    Is this a Global Sound File?
+]]--
+function SoundEffect:isGlobal()
+    return self.id ~= nil;
+end
 
 TauntAlert.SOUND_EFFECTS = {
+    Zip = SoundEffect:new({
+        name = "Custom: Zip",
+        file = "Interface\\AddOns\\ElvUI_TauntAlert\\Sounds\\DrainMagic.ogg"
+    }),
+    Blast = SoundEffect:new({
+        name = "Custom: Blast",
+        file = "Interface\\AddOns\\ElvUI_TauntAlert\\Sounds\\FireMagic.ogg"
+    }),
+    BarrelHit = SoundEffect:new({
+        name = "Custom: Barrel Hit",
+        file = "Interface\\AddOns\\ElvUI_TauntAlert\\Sounds\\MetalHit.ogg"
+    }),
+    SciFi = SoundEffect:new({
+        name = "Custom: SciFi Wiggle",
+        file = "Interface\\AddOns\\ElvUI_TauntAlert\\Sounds\\Powerup.ogg"
+    }),
     ArcaneExplosion = SoundEffect:new({
         name = "Arcane Explosion",
         id = 6539

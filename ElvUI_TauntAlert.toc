@@ -1,6 +1,6 @@
 ## Interface: 30401
 ## Author: Phoosa
-## Version: 1.6.0
+## Version: 1.6.1
 ## Title: |cff1784d1ElvUI Classic|r Taunt Alert
 ## Notes: Get Notified on various Taunt Events.
 ## RequiredDeps: ElvUI
@@ -16,3 +16,4 @@ Data\Spells.lua
 Data\TauntInfo.lua
 Data\SoundEffects.lua
 Config.lua
+

@@ -301,14 +301,26 @@ end
 ]]--
 function TauntAlert:ProcessTaunt(tauntInfo)
     -- Play Sound Effect for Taunt Event.
-    local soundId = TauntAlert.GetTauntEventSoundID[tauntInfo.casterType](tauntInfo);
-    if (soundId ~= nil) then
-        PlaySound(soundId);
-    end
+    TauntAlert:PlaySoundEffect(TauntAlert.GetTauntEventSound[tauntInfo.casterType](tauntInfo));
 
     -- Display the Taunt Event in Chat.
     if (TauntAlert.CanDisplayTauntEvent[tauntInfo.casterType](tauntInfo)) then
         TauntAlert:AnnounceMessage(TauntAlert:FormatChatMessage(tauntInfo));
+    end
+end
+
+
+--[[
+    Play Sound Effect
+    @param {SoundEffect} soundEffect
+]]--
+function TauntAlert:PlaySoundEffect(soundEffect)
+    if (soundEffect ~= nil) then
+        if (soundEffect:isGlobal()) then
+            PlaySound(soundEffect.id);
+        elseif (soundEffect.file ~= nil) then
+            PlaySoundFile(soundEffect.file);
+        end
     end
 end
 
@@ -453,44 +465,44 @@ TauntAlert.CanDisplayTauntEvent = {
     Get the Taunt Event Sound ID to play
     @return number|nil
 ]]--
-TauntAlert.GetTauntEventSoundID = {
+TauntAlert.GetTauntEventSound = {
     [TauntAlert.SPELL_CASTER_TYPE.ME] = function (tauntInfo)
         if (tauntInfo.success) then
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearMineSuccess")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearMineSuccess")];
         else 
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearMineFailed")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearMineFailed")];
         end
     end,
     [TauntAlert.SPELL_CASTER_TYPE.PARTY] = function(tauntInfo)
         if (tauntInfo.type == TauntAlert.TAUNT_TYPES.TRANS) then
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyTransfer")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyTransfer")];
         elseif (tauntInfo.success) then
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartySuccess")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartySuccess")];
         else 
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyFailed")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyFailed")];
         end
     end,
     [TauntAlert.SPELL_CASTER_TYPE.PARTY_PET] = function(tauntInfo)
         if (tauntInfo.success) then
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyPetSuccess")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyPetSuccess")];
         else 
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyPetFailed")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearPartyPetFailed")];
         end
     end,
     [TauntAlert.SPELL_CASTER_TYPE.OTHER] = function(tauntInfo)
         if (tauntInfo.type == TauntAlert.TAUNT_TYPES.TRANS) then
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherTransfer")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherTransfer")];
         elseif (tauntInfo.success) then
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPlayerSuccess")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPlayerSuccess")];
         else 
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPlayerFailed")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPlayerFailed")];
         end
     end,
     [TauntAlert.SPELL_CASTER_TYPE.OTHER_PET] = function(tauntInfo)
         if (tauntInfo.success) then
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPetSuccess")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPetSuccess")];
         else 
-            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPetFailed")].id;
+            return TauntAlert.SOUND_EFFECTS[TauntAlert:GetConfigValue("HearOtherPetFailed")];
         end
     end
 };
